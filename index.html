@@ -18,19 +18,33 @@
     ctx.fillStyle = 'black'
     ctx.storkeStyle = 'none'
     let painting = false
-    canvas.onmousedown = () => {
-      painting = true
-    }
-    canvas.onmousemove = (e) => {
-      if (painting) {
+    //判断是否有触屏事件
+    let isTouchDevice = 'ontouchstart' in document.documentElement
+    if (isTouchDevice) {
+      canvas.ontouchmove = (e) => {
+        let x = e.touches[0].clientX
+        let y = e.touches[0].clientY
+        console.log(x, y)
         ctx.beginPath()
-        ctx.arc(e.clientX, e.clientY, 5, 0, 2 * Math.PI)
+        ctx.arc(x, y, 5, 0, 2 * Math.PI)
         ctx.stroke()
         ctx.fill()
       }
-    }
-    canvas.onmouseup = () => {
-      painting = false
+    } else {
+      canvas.onmousedown = () => {
+        painting = true
+      }
+      canvas.onmousemove = (e) => {
+        if (painting) {
+          ctx.beginPath()
+          ctx.arc(e.clientX, e.clientY, 5, 0, 2 * Math.PI)
+          ctx.stroke()
+          ctx.fill()
+        }
+      }
+      canvas.onmouseup = () => {
+        painting = false
+      }
     }
   </script>
 </body>
